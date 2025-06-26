@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz AI Game - Permainan Quiz dengan AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Language Selector -->
+    <div class="language-selector">
+        <select id="language-selector">
+            <option value="id">🇮🇩 Bahasa Indonesia</option>
+            <option value="en">🇺🇸 English</option>
+            <option value="ja">🇯🇵 日本語</option>
+            <option value="zh">🇨🇳 中文</option>
+        </select>
+    </div>
+
+    <div class="game-container">
+        <!-- Loading Screen -->
+        <div id="loading-screen" class="screen active">
+            <div class="loading-content">
+                <div class="logo">
+                    <i class="fas fa-brain"></i>
+                    <h1 data-i18n="loading_title">Quiz AI Game</h1>
+                </div>
+                <div class="loading-bar">
+                    <div class="loading-progress"></div>
+                </div>
+                <p data-i18n="loading_subtitle">Memuat AI Quiz Engine...</p>
+            </div>
+        </div>
+
+        <!-- Welcome Screen -->
+        <div id="welcome-screen" class="screen">
+            <div class="welcome-content">
+                <div class="welcome-header-row">
+                    <div class="svg-gamepad">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="game-title">
+                        <h1 data-i18n="welcome_title">Mind Master</h1>
+                        <p data-i18n="welcome_subtitle">Bermain dan Belajar dengan AI</p>
+                    </div>
+                </div>
+                
+                <div class="player-setup">
+                    <div class="input-group">
+                        <label for="player-name" data-i18n="player_name_label">Masukkan Nama Anda:</label>
+                        <input type="text" id="player-name" data-i18n="player_name_placeholder" placeholder="Nama Pemain" maxlength="20">
+                    </div>
+                    <button id="start-game-btn" class="btn-primary">
+                        <i class="fas fa-play"></i>
+                        <span data-i18n="start_game">Mulai Permainan</span>
+                    </button>
+                </div>
+                <div class="team-name">ERROR 404</div>
+                <div class="team-members">Ali Fauzi, Janitha Didula</div>
+            </div>
+        </div>
+
+        <!-- Topic Selection Screen -->
+        <div id="topic-screen" class="screen">
+            <div class="topic-content">
+                <div class="header">
+                    <h2 data-i18n="topic_title">Pilih Topik Quiz</h2>
+                    <p data-i18n="topic_subtitle">Pilih topik yang ingin Anda pelajari</p>
+                </div>
+
+                <div class="topic-grid">
+                    <div class="topic-card" data-topic="Sejarah Indonesia">
+                        <i class="fas fa-landmark"></i>
+                        <h3 data-i18n="topic_history">Sejarah Indonesia</h3>
+                        <p data-i18n="topic_history_desc">Pelajari sejarah bangsa Indonesia</p>
+                    </div>
+                    <div class="topic-card" data-topic="Sains dan Teknologi">
+                        <i class="fas fa-atom"></i>
+                        <h3 data-i18n="topic_science">Sains & Teknologi</h3>
+                        <p data-i18n="topic_science_desc">Eksplorasi dunia sains modern</p>
+                    </div>
+                    <div class="topic-card" data-topic="Geografi Dunia">
+                        <i class="fas fa-globe-asia"></i>
+                        <h3 data-i18n="topic_geography">Geografi Dunia</h3>
+                        <p data-i18n="topic_geography_desc">Jelajahi dunia dan benua</p>
+                    </div>
+                    <div class="topic-card" data-topic="Matematika">
+                        <i class="fas fa-calculator"></i>
+                        <h3 data-i18n="topic_math">Matematika</h3>
+                        <p data-i18n="topic_math_desc">Latih kemampuan berhitung</p>
+                    </div>
+                    <div class="topic-card" data-topic="Seni dan Budaya">
+                        <i class="fas fa-palette"></i>
+                        <h3 data-i18n="topic_arts">Seni & Budaya</h3>
+                        <p data-i18n="topic_arts_desc">Kenali seni dan budaya dunia</p>
+                    </div>
+                    <div class="topic-card" data-topic="Olahraga">
+                        <i class="fas fa-futbol"></i>
+                        <h3 data-i18n="topic_sports">Olahraga</h3>
+                        <p data-i18n="topic_sports_desc">Test pengetahuan olahraga</p>
+                    </div>
+                </div>
+
+                <div class="custom-topic">
+                    <h3 data-i18n="custom_topic_title">Atau pilih topik custom:</h3>
+                    <div class="input-group">
+                        <input type="text" id="custom-topic" data-i18n="custom_topic_placeholder" placeholder="Masukkan topik yang diinginkan...">
+                        <button id="custom-topic-btn" class="btn-secondary">
+                            <i class="fas fa-magic"></i>
+                            <span data-i18n="generate_question">Generate Soal</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen">
+            <div class="game-header">
+                <div class="player-info">
+                    <span id="player-name-display"></span>
+                    <div class="score">
+                        <i class="fas fa-star"></i>
+                        <span id="current-score">0</span>
+                    </div>
+                    <div class="lives">
+                        <i class="fas fa-heart"></i>
+                        <span id="current-lives">5</span>
+                    </div>
+                </div>
+                <div class="game-controls">
+                    <button id="new-question-btn" class="btn-secondary">
+                        <i class="fas fa-refresh"></i>
+                        <span data-i18n="new_question">Soal Baru</span>
+                    </button>
+                    <button id="back-to-topics-btn" class="btn-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        <span data-i18n="change_topic">Ganti Topik</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="question-container">
+                <div class="question-header">
+                    <h2 id="question-text" data-i18n="loading_question">Memuat soal...</h2>
+                </div>
+
+                <div class="options-container">
+                    <div class="option" data-index="0">
+                        <span class="option-letter">A</span>
+                        <span class="option-text" id="option-0" data-i18n="loading_options">Memuat opsi...</span>
+                    </div>
+                    <div class="option" data-index="1">
+                        <span class="option-letter">B</span>
+                        <span class="option-text" id="option-1" data-i18n="loading_options">Memuat opsi...</span>
+                    </div>
+                    <div class="option" data-index="2">
+                        <span class="option-letter">C</span>
+                        <span class="option-text" id="option-2" data-i18n="loading_options">Memuat opsi...</span>
+                    </div>
+                    <div class="option" data-index="3">
+                        <span class="option-letter">D</span>
+                        <span class="option-text" id="option-3" data-i18n="loading_options">Memuat opsi...</span>
+                    </div>
+                </div>
+
+                <div class="explanation-container" id="explanation-container" style="display: none;">
+                    <div class="explanation-header">
+                        <i class="fas fa-lightbulb"></i>
+                        <h3 data-i18n="explanation_title">Penjelasan</h3>
+                    </div>
+                    <div class="explanation-text" id="explanation-text"></div>
+                    <button id="next-question-btn" class="btn-primary">
+                        <i class="fas fa-arrow-right"></i>
+                        <span data-i18n="next_question">Soal Berikutnya</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="game-over-screen" class="screen">
+            <div class="game-over-content">
+                <div class="game-over-header">
+                    <i class="fas fa-skull"></i>
+                    <h2 data-i18n="game_over_title">Game Over!</h2>
+                    <p data-i18n="game_over_subtitle">Nyawa Anda telah habis</p>
+                </div>
+
+                <div class="final-stats">
+                    <div class="stat-item">
+                        <i class="fas fa-trophy"></i>
+                        <h3 data-i18n="final_score">Skor Akhir</h3>
+                        <div class="stat-value" id="game-over-score">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-check-circle"></i>
+                        <h3 data-i18n="correct_answers">Jawaban Benar</h3>
+                        <div class="stat-value" id="game-over-correct">0</div>
+                    </div>
+                    <div class="stat-item">
+                        <i class="fas fa-times-circle"></i>
+                        <h3 data-i18n="wrong_answers">Jawaban Salah</h3>
+                        <div class="stat-value" id="game-over-wrong">0</div>
+                    </div>
+                </div>
+
+                <div class="motivational-message">
+                    <div class="message-header">
+                        <i class="fas fa-comments"></i>
+                        <h3 data-i18n="ai_message_title">Pesan dari AI</h3>
+                    </div>
+                    <div class="message-text" id="motivational-text" data-i18n="loading_motivation">
+                        Memuat pesan motivasi...
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="play-again-game-over-btn" class="btn-primary">
+                        <i class="fas fa-redo"></i>
+                        <span data-i18n="play_again">Main Lagi</span>
+                    </button>
+                    <button id="new-game-game-over-btn" class="btn-secondary">
+                        <i class="fas fa-home"></i>
+                        <span data-i18n="main_menu">Menu Utama</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Results Screen -->
+        <div id="results-screen" class="screen">
+            <div class="results-content">
+                <div class="results-header">
+                    <i class="fas fa-trophy"></i>
+                    <h2 data-i18n="results_title">Hasil Permainan</h2>
+                </div>
+
+                <div class="final-score">
+                    <h3 data-i18n="final_score_label">Skor Akhir Anda:</h3>
+                    <div class="score-display" id="final-score">0</div>
+                </div>
+
+                <div class="performance-stats">
+                    <div class="stat">
+                        <i class="fas fa-check-circle"></i>
+                        <span data-i18n="correct_answers">Jawaban Benar: <span id="correct-answers">0</span></span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-times-circle"></i>
+                        <span data-i18n="wrong_answers">Jawaban Salah: <span id="wrong-answers">0</span></span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-percentage"></i>
+                        <span data-i18n="accuracy">Akurasi: <span id="accuracy">0%</span></span>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="play-again-btn" class="btn-primary">
+                        <i class="fas fa-redo"></i>
+                        <span data-i18n="play_again">Main Lagi</span>
+                    </button>
+                    <button id="new-game-btn" class="btn-secondary">
+                        <i class="fas fa-home"></i>
+                        <span data-i18n="main_menu">Menu Utama</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/i18n.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 
